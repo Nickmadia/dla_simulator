@@ -16,14 +16,12 @@ fn read_heatmap_file<P: AsRef<Path>>(filename: P) -> Result<Vec<i32>, io::Error>
     Ok(data)
 }
 
+fn draw_heatmap<P: AsRef<Path>>(filename: P,fileout: P, y : usize, x : usize) -> Result<(),Box<dyn Error>>{
 
-fn main() -> Result<(), Box<dyn Error>> {
     // Read the binary file
-    let heatmap_data = read_heatmap_file("../parallel_simulation.bin")?;
-    let y = 1000 as usize;
-    let x = 1000 as usize;
+    let heatmap_data = read_heatmap_file(filename)?;
     // Visualize the heat map using plotters
-    let root = BitMapBackend::new("results/heatmap.png", (y as u32, x as u32)).into_drawing_area();
+    let root = BitMapBackend::new(&fileout, (y as u32, x as u32)).into_drawing_area();
     root.fill(&BLACK)?;
 
     let max_value = heatmap_data.iter().copied().max().unwrap();
@@ -45,7 +43,13 @@ fn main() -> Result<(), Box<dyn Error>> {
         root.draw_pixel((x, y), &color)?;
         }
     }
-    println!("heatmap saved at 'bin_visualizer/result/heatmap.png'");
+    Ok(())
+}
 
+fn main() -> Result<(), Box<dyn Error>> {
+    let y = 1000 as usize;
+    let x = 1000 as usize;
+    draw_heatmap("../parallel_simulation.bin", "results/heatmap_parallel.png", y, x)?;
+    println!("heatmap saved at 'bin_visualizer/result/heatmap.png'");
     Ok(())
 }

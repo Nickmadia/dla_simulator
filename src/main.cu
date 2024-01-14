@@ -44,7 +44,6 @@ __device__ void randomize_single_d(Particle *particle, curandState * states,int 
 __global__ void init_seeds( curandState *state) {
     if (SEED_POSITION == "center") {
         grid_d[GRID_HEIGHT/2][GRID_WIDTH/2] = 1;
-        //grid[10][10] = 1;
     } else if ( SEED_POSITION == "random") {
        for (int i =0; i< SEED_COUNT; i++) {
           int x = (int)random_float_d(state, 0,GRID_HEIGHT);
@@ -193,12 +192,12 @@ int main() {
     
     }
     //init array to -1 
-    //initialize_array(grid, GRID_HEIGHT, GRID_WIDTH, -1);
+    initialize_array(grid, GRID_HEIGHT, GRID_WIDTH, -1);
     
     //place static seed
     if (SEED_POSITION == "center") {
-        //grid[GRID_WIDTH/2][GRID_HEIGHT/2] = 1;
-        //grid[10][10] = 1;
+        grid[GRID_WIDTH/2][GRID_HEIGHT/2] = 1;
+        grid[10][10] = 1;
     } else if ( SEED_POSITION == "random") {
        for (int i =0; i< SEED_COUNT; i++) {
           int x = (int)random_float(0,GRID_HEIGHT);
@@ -236,7 +235,6 @@ int main() {
     int mem_size = sizeof(int) * GRID_HEIGHT * GRID_WIDTH;
     //get result form gpu
     cudaMemcpyFromSymbol(grid, grid_d, mem_size, 0, cudaMemcpyDeviceToHost);
-    printf("%d", grid[100][500]);
     time_t end_parallel = clock();
     double elapsed_time_parallel  = (double)(end_parallel - start_parallel) / CLOCKS_PER_SEC;
     printf("parallel elapsed Time: %f seconds\n\n", elapsed_time_parallel);

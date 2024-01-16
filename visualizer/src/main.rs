@@ -50,6 +50,8 @@ fn main() -> Result<(), Box<dyn Error>> {
     let y = 1000 as usize;
     let x = 1000 as usize;
     draw_heatmap("../parallel_simulation.bin", "results/heatmap_parallel.png", y, x)?;
-    println!("heatmap saved at 'bin_visualizer/result/heatmap.png'");
+    println!("heatmap saved at 'bin_visualizer/result/heatmap_parallel.png'");
+    draw_heatmap("../serial_simulation.bin", "results/heatmap_serial.png", y, x)?;
+    println!("heatmap saved at 'bin_visualizer/result/heatmap_serial.png'");
     Ok(())
 }

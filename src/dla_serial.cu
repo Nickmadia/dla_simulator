@@ -2,6 +2,7 @@
 #ifndef DLA_SERIAL
 #define DLA_SERIAL
 #include "dla_serial.h"
+#include "dla_parallel.h"
 void initialize_array(int (*array)[GRID_WIDTH], int height, int width, int value) {
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
@@ -64,8 +65,26 @@ __host__ void move_particle(Particle *particle ) {
         particle->vertical_speed *= -1.0f;
     }
 }
+void place_seeds(int (*grid)[GRID_WIDTH]){
 
-void simulate(Particle particles[], int (*grid)[GRID_WIDTH]) {
+    if (SEED_POSITION == "center") {
+        grid[GRID_WIDTH/2][GRID_HEIGHT/2] = 1;
+    } else if ( SEED_POSITION == "random") {
+       for (int i =0; i< SEED_COUNT; i++) {
+          int x = (int)random_float(0,GRID_HEIGHT);
+          int y =(int) random_float(0,GRID_WIDTH);
+          grid[y][x] = 1;
+       } 
+    }
+}
+void simulate( int (*grid)[GRID_WIDTH]) {
+    initialize_array(grid, GRID_HEIGHT, GRID_WIDTH, -1);
+    place_seeds(grid);
+
+    Particle particles[PARTICLE_COUNT];
+    printf("initializing particles...\n");
+    randomize_particles(particles, PARTICLE_COUNT, GRID_HEIGHT, GRID_WIDTH, MAX_SPEED);
+    printf("starting serial simulation...\n\n");
     for ( int i = 0; i < ITERATIONS; i++) {
         for ( int k = 0; k < PARTICLE_COUNT; k ++) {
             if(particles[k].solid){
@@ -73,7 +92,7 @@ void simulate(Particle particles[], int (*grid)[GRID_WIDTH]) {
             }
             move_particle(&particles[k]);
             
-            check_hit(&particles[k], grid, i);
+            check_hit(&particles[k], (int*)grid, i);
         }
     }
 }

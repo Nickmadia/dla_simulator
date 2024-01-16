@@ -13,13 +13,10 @@ __host__ void randomize_single(Particle *particle, int count, int max_y, int max
 
 __host__ void randomize_particles(Particle particles[], int count, int max_y, int max_x, int max_speed);
 
-__device__ __host__ void make_static(Particle *particle, int (*grid)[GRID_WIDTH], int tick);
-
-__device__ __host__ void check_hit(Particle *particle, int (*grid)[GRID_WIDTH], int tick);
 
 __host__ void move_particle(Particle *particle);
 
 
-void simulate(Particle particles[], int (*grid)[GRID_WIDTH]);
+void simulate( int (*grid)[GRID_WIDTH]);
 
 #endif //PARTICLE_SIMULATION_H

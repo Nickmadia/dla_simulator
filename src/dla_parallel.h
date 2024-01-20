@@ -30,6 +30,14 @@ __device__ __host__ void check_hit(Particle *particle, int *grid, int tick);
 
 __global__ void tick(int * grid_d, Particle *particles, curandState *states, int k);
 
+__host__ int * init_grid();
+
+curandState * init_rng_states(int threads, int blocks);
+ 
+Particle * init_particles(curandState * d_rngStates, int threads, int blocks);
+
+void check_cuda_error();
+
 void simulate_parallel(int * grid);
 
 #endif // DLA_PARALLEL_H

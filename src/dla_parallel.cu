@@ -4,11 +4,11 @@ __device__ __host__ void make_static(Particle *particle, int *grid, int tick) {
     //TODO implement circle check instead of squared
     for ( int i = -PARTICLE_RADIUS; i <= PARTICLE_RADIUS; i++) {
         for (int j = -PARTICLE_RADIUS; j<= PARTICLE_RADIUS; j++) {
-            int dx = (int)particle->x - i;
-            int dy = (int)particle->y - j;
+            int dx = (int)particle->x - j;
+            int dy = (int)particle->y - i;
             // if in bound
-            float da = (float) particle-> x - dx;
-            float db = (float) particle-> y - dy;
+            //float da = (float) particle-> x - dx;
+            //float db = (float) particle-> y - dy;
             if (dx >= 0 && dx < GRID_WIDTH && dy >= 0 && dy < GRID_HEIGHT) {
                 float d = sqrt((float)(i * i) +(float) (j *j));
                 if(d<= PARTICLE_RADIUS) {
@@ -23,12 +23,12 @@ __device__ __host__ void check_hit(Particle *particle, int * grid, int tick) {
     bool loop = true;
     for ( int i = -PARTICLE_RADIUS; i <= PARTICLE_RADIUS && loop; i++) {
         for (int j = -PARTICLE_RADIUS; j<= PARTICLE_RADIUS; j++) {
-            int dx = particle->x - i;
-            int dy = particle->y - j;
+            int dx = particle->x - j;
+            int dy = particle->y - i;
             // if in bound
             if (dx >= 0 && dx < GRID_WIDTH && dy >= 0 && dy < GRID_HEIGHT) {
-                float da = (float) particle-> x - dx;
-                float db = (float) particle-> y - dy;
+                //float da = (float) particle-> x - dx;
+                //float db = (float) particle-> y - dy;
                 float d = sqrt((float)(i*i) + (float)(j *j));
                 if(d<= PARTICLE_RADIUS) {
                 if (grid[dy* GRID_WIDTH + dx] >= 0) {
@@ -91,28 +91,23 @@ __global__ void init_particles_d(Particle* particles, curandState *states) {
 }
 __device__ void move_particle_d(Particle *particle, curandState* states ) {
 
-    particle->horizontal_speed = random_speed_d(states, MAX_SPEED);
-    particle->vertical_speed = random_speed_d(states, MAX_SPEED);
     // move particle
-    particle->x += particle->horizontal_speed;
-    particle->y += particle->vertical_speed;
+    particle->x += random_speed_d(states,MAX_SPEED);
+
+    particle->y += random_speed_d(states,MAX_SPEED);
 
     // check bounds
     if(particle->x - PARTICLE_RADIUS <= 0.0f) {
         particle->x = 0.01f + PARTICLE_RADIUS;
-        particle->horizontal_speed *= -1.0f;
     }
     else if(particle->x + PARTICLE_RADIUS >= GRID_WIDTH) {
         particle->x = GRID_WIDTH - 0.01f - PARTICLE_RADIUS;
-        particle->horizontal_speed *= -1.0f;
     }
     if(particle->y - PARTICLE_RADIUS <= 0.0f) {
         particle->y = 0.01f + PARTICLE_RADIUS ;
-        particle->vertical_speed *= -1.0f;
     }
     else if(particle->y + PARTICLE_RADIUS >= GRID_HEIGHT) {
         particle->y = GRID_HEIGHT - 0.01f - PARTICLE_RADIUS;
-        particle->vertical_speed *= -1.0f;
     }
 }
 
@@ -160,6 +155,7 @@ Particle * init_particles( curandState * d_rngStates, int threads, int blocks) {
     init_particles_d<<<blocks, threads>>>(particles_d, d_rngStates);
     cudaDeviceSynchronize();
     return particles_d;
+
 
 }
 void check_cuda_error() {

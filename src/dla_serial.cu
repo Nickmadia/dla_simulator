@@ -41,28 +41,22 @@ __host__ void randomize_particles(Particle particles[], int count, int max_y, in
 
 __host__ void move_particle(Particle *particle ) {
 
-    particle->horizontal_speed = random_speed(MAX_SPEED);
-    particle->vertical_speed = random_speed(MAX_SPEED);
     // move particle
-    particle->x += particle->horizontal_speed;
-    particle->y += particle->vertical_speed;
+    particle->x += random_speed(MAX_SPEED);
+    particle->y += random_speed(MAX_SPEED);
 
     // check bounds
     if(particle->x - PARTICLE_RADIUS <= 0.0f) {
         particle->x = 0.01f + PARTICLE_RADIUS;
-        particle->horizontal_speed *= -1.0f;
     }
     else if(particle->x + PARTICLE_RADIUS >= GRID_WIDTH) {
         particle->x = GRID_WIDTH - 0.01f - PARTICLE_RADIUS;
-        particle->horizontal_speed *= -1.0f;
     }
     if(particle->y - PARTICLE_RADIUS <= 0.0f) {
         particle->y = 0.01f + PARTICLE_RADIUS ;
-        particle->vertical_speed *= -1.0f;
     }
     else if(particle->y + PARTICLE_RADIUS >= GRID_HEIGHT) {
         particle->y = GRID_HEIGHT - 0.01f - PARTICLE_RADIUS;
-        particle->vertical_speed *= -1.0f;
     }
 }
 void place_seeds(int (*grid)[GRID_WIDTH]){

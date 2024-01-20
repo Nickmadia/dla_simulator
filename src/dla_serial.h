@@ -13,9 +13,9 @@ __host__ void randomize_single(Particle *particle, int count, int max_y, int max
 
 __host__ void randomize_particles(Particle particles[], int count, int max_y, int max_x, int max_speed);
 
-
 __host__ void move_particle(Particle *particle);
 
+void place_seeds(int (*grid)[GRID_WIDTH]);
 
 void simulate( int (*grid)[GRID_WIDTH]);
 

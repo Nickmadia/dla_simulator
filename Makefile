@@ -30,15 +30,15 @@ all: print_vars $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJS)
 	@mkdir -p $(BIN_DIR)
-	$(NVCC) $(OBJS) -o $@ $(LDFLAGS) -ccbin /opt/cuda/bin
+	$(NVCC) $(OBJS) -o $@ $(LDFLAGS) -ccbin /opt/cuda/bin -O3
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(CONFIG_H)
 	@mkdir -p $(OBJ_DIR)
-	$(CC) $(CFLAGS) $< -o $@
+	$(CC) $(CFLAGS) $< -o $@ 
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cu $(CONFIG_H) 
 	@mkdir -p $(OBJ_DIR)
-	$(NVCC) $(NVCCFLAGS) $< -o $@ -ccbin /opt/cuda/bin 
+	$(NVCC) $(NVCCFLAGS) $< -o $@ -ccbin /opt/cuda/bin -O3
 
 clean:
 	rm -rf $(OBJ_DIR) $(BIN_DIR)

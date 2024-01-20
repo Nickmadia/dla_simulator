@@ -53,5 +53,6 @@ fn main() -> Result<(), Box<dyn Error>> {
     println!("heatmap saved at 'bin_visualizer/result/heatmap_parallel.png'");
     draw_heatmap("../serial_simulation.bin", "results/heatmap_serial.png", y, x)?;
     println!("heatmap saved at 'bin_visualizer/result/heatmap_serial.png'");
+    draw_heatmap("../omp_simulation.bin", "results/heatmap_omp.png", y, x)?;
     Ok(())
 }

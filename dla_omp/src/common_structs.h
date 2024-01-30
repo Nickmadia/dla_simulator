@@ -10,8 +10,5 @@ typedef struct {
     int y;
     bool solid;
 } Particle;
-typedef struct {
-    float x;
-    float y;
-} Coord;
+
 #endif // COMMON_H

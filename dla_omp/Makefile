@@ -32,7 +32,7 @@ $(EXECUTABLE): $(OBJS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(CONFIG_H)
 	@mkdir -p $(OBJ_DIR)
-	$(CC) $(CFLAGS) $< -o $@ -fopenmp -O3 -lm -O3
+	$(CC) $(CFLAGS) $< -o $@ -fopenmp -lm -O3
 
 
 clean:

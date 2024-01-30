@@ -16,10 +16,11 @@ __host__ float random_float(int lower, int upper)
         return (rand() % (upper - lower + 1)) + lower; 
 } 
 __host__ float random_speed(int max_speed){
-    float direction =  ((float) rand()/RAND_MAX) * M_PI * 2;
+    //returns a random direction 
+    float direction =   rand()%3 -1;
     float speed =  ((float) rand()/RAND_MAX) * max_speed;
     
-    return sinf(direction) * speed;
+    return direction * speed;
 
 }
 
@@ -32,8 +33,7 @@ __host__ void randomize_single(Particle *particle, int count, int max_y, int max
 }
 
 __host__ void randomize_particles(Particle particles[], int count, int max_y, int max_x,int max_speed) {
-    // init trough clock time
-    //TODO encapsulate rnadomization of a single particle
+    //places particles randomly on the grid
     for (int i = 0; i < count; i++) {
         randomize_single(&particles[i], count, max_y, max_x, max_speed);
     }
@@ -60,7 +60,7 @@ __host__ void move_particle(Particle *particle ) {
     }
 }
 void place_seeds(int (*grid)[GRID_WIDTH]){
-
+    //initializes seeds on the grid
     if (SEED_POSITION == "center") {
         grid[GRID_WIDTH/2][GRID_HEIGHT/2] = 1;
     } else if ( SEED_POSITION == "random") {
@@ -76,9 +76,13 @@ void simulate( int (*grid)[GRID_WIDTH]) {
     place_seeds(grid);
 
     Particle particles[PARTICLE_COUNT];
+    if(DEBUG)
     printf("initializing particles...\n");
+    
     randomize_particles(particles, PARTICLE_COUNT, GRID_HEIGHT, GRID_WIDTH, MAX_SPEED);
+    if(DEBUG)
     printf("starting serial simulation...\n\n");
+    //simulating the passing of time with ticks(i) and moving each particle sequentially
     for ( int i = 0; i < ITERATIONS; i++) {
         for ( int k = 0; k < PARTICLE_COUNT; k ++) {
             if(particles[k].solid){

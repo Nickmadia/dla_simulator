@@ -112,7 +112,7 @@ __device__ void move_particle_d(Particle *particle, curandState* states ) {
 }
 
 __global__ void tick( int * grid_d, Particle *particles, curandState * states, int k) {
-
+    //simulate a single unit of time
     int i = threadIdx.x + blockIdx.x * blockDim.x; 
     Particle *particle = particles + i;
     if (i < PARTICLE_COUNT) {
@@ -130,7 +130,7 @@ int * init_grid() {
     cudaMalloc((void**)&grid_d, array_size);
     dim3 threadsPerBlock(16, 16);
     dim3 blocks(GRID_WIDTH/ threadsPerBlock.x + 1, GRID_HEIGHT / threadsPerBlock.y + 1);
-
+    if(DEBUG)
     printf("initializing parallel grid...\n");
     //init grid to -1
     init_array_d<<<blocks, threadsPerBlock>>>(grid_d,-1);
@@ -138,7 +138,7 @@ int * init_grid() {
     return grid_d;
 }
 curandState* init_rng_states( int threads, int blocks) {
-
+    //initializing array of seeds to be used for the PRG
     curandState *d_rngStates;
     cudaMalloc((void**)&d_rngStates, PARTICLE_COUNT * sizeof(curandState));
     
@@ -187,6 +187,7 @@ void simulate_parallel(int * grid) {
     Particle* particles_d = init_particles( d_rngStates, threads_block,sim_blocks);
 
     check_cuda_error();
+    if(DEBUG)
     printf("starting parallel simulation...\n\n");
     
     for( int i = 0; i< ITERATIONS; i++) {

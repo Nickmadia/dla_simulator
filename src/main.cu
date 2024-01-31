@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "config.h"
 #include "common_structs.h"
 #include "dla_serial.h"
@@ -37,7 +38,7 @@ int main() {
 
     srand((unsigned int)time(NULL));
     //declaring array of ints in order to use a heat map later
-    int grid[GRID_HEIGHT][GRID_WIDTH];
+    int * grid = (int*)malloc(GRID_HEIGHT * GRID_WIDTH * sizeof(int));
     if (!SKIP_SERIAL) {
 
         time_t start_time = clock();
@@ -45,14 +46,14 @@ int main() {
             printf("initializing grid...\n");
     
         }
-        simulate(grid); 
+        simulate((int (*)[GRID_WIDTH])grid); 
 
         time_t end_time = clock();
         double elapsed_time = (double)(end_time - start_time)/CLOCKS_PER_SEC;
 
         printf("serial Elapsed Time: %f seconds\n\n", elapsed_time);
 
-        save_heat_map_to_binary_file(grid, "serial_simulation.bin");
+        save_heat_map_to_binary_file((int (*)[GRID_WIDTH])grid, "serial_simulation.bin");
 
     }
     //start parallel 
@@ -66,7 +67,7 @@ int main() {
 
     printf("parallel elapsed Time: %f seconds\n\n", elapsed_time_parallel);
 
-    save_heat_map_to_binary_file(grid, "parallel_simulation.bin");
-
+    save_heat_map_to_binary_file((int (*)[GRID_WIDTH])grid, "parallel_simulation.bin");
+    free(grid);
     return 0;
 }

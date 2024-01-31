@@ -9,7 +9,7 @@
 #define SEED_COUNT 10
 //seed start can be: center, random, fixed (if fixed must give coordinates for every seed at run time)
 #define SEED_POSITION "center"
-#define PARTICLE_COUNT 20000
+#define PARTICLE_COUNT 80000
 #define PARTICLE_RADIUS 1 
 #define NUM_T 19 
 #define DEBUG true

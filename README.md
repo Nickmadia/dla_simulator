@@ -10,5 +10,7 @@ The project consists of two main implementations:
 
 2. **Parallel (CUDA) Implementation**: The parallel version leverages CUDA, a parallel computing platform, to speed up the simulation. Multiple threads work concurrently to simulate particle motion, taking advantage of GPU parallelism.
 
+3. **Parallel (OMP) Implementation**: Here I am using the OMP API in order to get a significant speedup in the simulation.
+   
 ## Results and Visualization
 Explore the `examples/` directory for visualizations and images generated from the simulations.
